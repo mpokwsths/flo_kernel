@@ -74,12 +74,10 @@ static void nl_srv_rcv_msg (struct sk_buff *skb, struct nlmsghdr *nlh);
 int nl_srv_init(void)
 {
    int retcode = 0;
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
    struct netlink_kernel_cfg cfg = {
       .groups = WLAN_NLINK_MCAST_GRP_ID,
       .input = nl_srv_rcv
    };
-#endif
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
    nl_srv_sock = netlink_kernel_create(&init_net, WLAN_NLINK_PROTO_FAMILY,
