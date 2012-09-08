@@ -79,16 +79,8 @@ int nl_srv_init(void)
       .input = nl_srv_rcv
    };
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
    nl_srv_sock = netlink_kernel_create(&init_net, WLAN_NLINK_PROTO_FAMILY,
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,7,0))
-                                       THIS_MODULE,
-#endif
                                        &cfg);
-#else
-   nl_srv_sock = netlink_kernel_create(&init_net, WLAN_NLINK_PROTO_FAMILY,
-      WLAN_NLINK_MCAST_GRP_ID, nl_srv_rcv, NULL, THIS_MODULE);
-#endif
 
    if (nl_srv_sock != NULL) {
       memset(nl_srv_msg_handler, 0, sizeof(nl_srv_msg_handler));
