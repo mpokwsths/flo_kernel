@@ -30,6 +30,7 @@
 #include <linux/irqdomain.h>
 
 #include "clock.h"
+#include "platsmp.h"
 
 static struct of_device_id irq_match[] __initdata  = {
 	{ .compatible = "qcom,msm-qgic2", .data = gic_of_init, },
@@ -107,4 +108,7 @@ DT_MACHINE_START(MSM_DT, "Qualcomm MSM (Flattened Device Tree)")
 	.handle_irq = gic_handle_irq,
 	.timer = &mpq8092_dt_timer,
 	.dt_compat = mpq8092_dt_match,
+	.reserve = mpq8092_dt_reserve,
+	.init_very_early = mpq8092_early_memory,
+	.smp = &msm8974_smp_ops,
 MACHINE_END
