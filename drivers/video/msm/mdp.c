@@ -2534,8 +2534,8 @@ void mdp_hw_version(void)
 
 #ifdef CONFIG_MSM_BUS_SCALING
 
-#ifndef MDP_BUS_VECTOR_ENTRY
-#define MDP_BUS_VECTOR_ENTRY(ab_val, ib_val)		\
+#ifndef MDP_BUS_VECTOR_ENTRY_P0
+#define MDP_BUS_VECTOR_ENTRY_P0(ab_val, ib_val)		\
 	{						\
 		.src = MSM_BUS_MASTER_MDP_PORT0,	\
 		.dst = MSM_BUS_SLAVE_EBI_CH0,		\
@@ -2543,17 +2543,49 @@ void mdp_hw_version(void)
 		.ib  = (ib_val),			\
 	}
 #endif
+#ifndef MDP_BUS_VECTOR_ENTRY_P1
+#define MDP_BUS_VECTOR_ENTRY_P1(ab_val, ib_val)		\
+	{						\
+		.src = MSM_BUS_MASTER_MDP_PORT1,	\
+		.dst = MSM_BUS_SLAVE_EBI_CH0,		\
+		.ab  = (ab_val),			\
+		.ib  = (ib_val),			\
+	}
+#endif
+
 /*
  *    Entry 0 hold 0 request
  *    Entry 1 and 2 do ping pong request
  */
-static struct msm_bus_vectors mdp_bus_vectors[] = {
-	MDP_BUS_VECTOR_ENTRY(0, 0),
-	MDP_BUS_VECTOR_ENTRY( 128000000,  160000000),
-	MDP_BUS_VECTOR_ENTRY( 128000000,  160000000),
+static struct msm_bus_vectors mdp_bus_init_vectors[] = {
+	MDP_BUS_VECTOR_ENTRY_P0(0, 0),
+	MDP_BUS_VECTOR_ENTRY_P1(0, 0),
 };
 
-static struct msm_bus_paths mdp_bus_usecases[ARRAY_SIZE(mdp_bus_vectors)];
+static struct msm_bus_vectors mdp_bus_ping_vectors[] = {
+	MDP_BUS_VECTOR_ENTRY_P0(128000000, 160000000),
+	MDP_BUS_VECTOR_ENTRY_P1(128000000, 160000000),
+};
+
+static struct msm_bus_vectors mdp_bus_pong_vectors[] = {
+	MDP_BUS_VECTOR_ENTRY_P0(128000000, 160000000),
+	MDP_BUS_VECTOR_ENTRY_P1(128000000, 160000000),
+};
+
+static struct msm_bus_paths mdp_bus_usecases[] = {
+	{
+		ARRAY_SIZE(mdp_bus_init_vectors),
+		mdp_bus_init_vectors,
+	},
+	{
+		ARRAY_SIZE(mdp_bus_ping_vectors),
+		mdp_bus_ping_vectors,
+	},
+	{
+		ARRAY_SIZE(mdp_bus_pong_vectors),
+		mdp_bus_pong_vectors,
+	},
+};
 static struct msm_bus_scale_pdata mdp_bus_scale_table = {
 	.usecase = mdp_bus_usecases,
 	.num_usecases = ARRAY_SIZE(mdp_bus_usecases),
@@ -2563,12 +2595,6 @@ static uint32_t mdp_bus_scale_handle;
 static int mdp_bus_scale_register(void)
 {
 	struct msm_bus_scale_pdata *bus_pdata = &mdp_bus_scale_table;
-	int i;
-	for (i = 0; i < bus_pdata->num_usecases; i++) {
-		mdp_bus_usecases[i].num_paths = 1;
-		mdp_bus_usecases[i].vectors = &mdp_bus_vectors[i];
-	}
-
 	if (!mdp_bus_scale_handle) {
 		mdp_bus_scale_handle = msm_bus_scale_register_client(bus_pdata);
 		if (!mdp_bus_scale_handle) {
@@ -2576,7 +2602,6 @@ static int mdp_bus_scale_register(void)
 			return -ENOMEM;
 		}
 	}
-
 	return 0;
 }
 
@@ -2599,19 +2624,19 @@ int mdp_bus_scale_update_request(u64 ab, u64 ib)
 	bus_index = (bus_index > 2) ? 1 : bus_index;
 
 	if (type==0) //keep original ab, ib calculation for JDI panel
-		mdp_bus_usecases[bus_index].vectors->ab = min(ab, mdp_max_bw);
+		mdp_bus_usecases[bus_index].vectors[0].ab = min(ab, mdp_max_bw);
 	else
-		mdp_bus_usecases[bus_index].vectors->ab = mdp_max_bw;
+		mdp_bus_usecases[bus_index].vectors[0].ab = mdp_max_bw;
 	ib = max(ib, ab);
 	if (type==0) //keep original ab, ib calculation for JDI panel
-		mdp_bus_usecases[bus_index].vectors->ib = min(ib, mdp_max_bw);
+		mdp_bus_usecases[bus_index].vectors[0].ib = min(ib, mdp_max_bw);
 	else
-		mdp_bus_usecases[bus_index].vectors->ib = mdp_max_bw;
+		mdp_bus_usecases[bus_index].vectors[0].ib = mdp_max_bw;
 
 	pr_debug("%s: handle=%d index=%d ab=%llu ib=%llu\n", __func__,
 		 (u32)mdp_bus_scale_handle, bus_index,
-		 mdp_bus_usecases[bus_index].vectors->ab,
-		 mdp_bus_usecases[bus_index].vectors->ib);
+		 mdp_bus_usecases[bus_index].vectors[0].ab,
+		 mdp_bus_usecases[bus_index].vectors[0].ib);
 
 	return msm_bus_scale_client_update_request
 		(mdp_bus_scale_handle, bus_index);
@@ -2619,11 +2644,11 @@ int mdp_bus_scale_update_request(u64 ab, u64 ib)
 static int mdp_bus_scale_restore_request(void)
 {
 	pr_debug("%s: index=%d ab=%llu ib=%llu\n", __func__, bus_index,
-		mdp_bus_usecases[bus_index].vectors->ab,
-		mdp_bus_usecases[bus_index].vectors->ib);
+		mdp_bus_usecases[bus_index].vectors[0].ab,
+		mdp_bus_usecases[bus_index].vectors[0].ib);
 	return mdp_bus_scale_update_request
-		(mdp_bus_usecases[bus_index].vectors->ab,
-		 mdp_bus_usecases[bus_index].vectors->ib);
+		(mdp_bus_usecases[bus_index].vectors[0].ab,
+		 mdp_bus_usecases[bus_index].vectors[0].ib);
 }
 #else
 static int mdp_bus_scale_restore_request(void)
