@@ -5413,7 +5413,7 @@ static void __init msm8x60_calculate_reserve_sizes(void)
 	msm8x60_reserve_table[MEMTYPE_EBI1].size += msm_contig_mem_size;
 }
 
-static int msm8x60_paddr_to_memtype(unsigned int paddr)
+static int msm8x60_paddr_to_memtype(phys_addr_t paddr)
 {
 	if (paddr >= 0x40000000 && paddr < 0x60000000)
 		return MEMTYPE_EBI1;
