@@ -511,6 +511,7 @@ static bool __ref msm_pm_spm_power_collapse(
 	void *entry;
 	bool collapsed = 0;
 	int ret;
+	bool save_cpu_regs = !cpu || from_idle;
 
 	if (MSM_PM_DEBUG_POWER_COLLAPSE & msm_pm_debug_mask)
 		pr_info("CPU%u: %s: notify_rpm %d\n",
@@ -523,15 +524,15 @@ static bool __ref msm_pm_spm_power_collapse(
 			MSM_SPM_MODE_POWER_COLLAPSE, notify_rpm);
 	WARN_ON(ret);
 
-	entry = (!cpu || from_idle) ?
-		msm_pm_collapse_exit : msm_secondary_startup;
+	entry = save_cpu_regs ?  msm_pm_collapse_exit : msm_secondary_startup;
+
 	msm_pm_boot_config_before_pc(cpu, virt_to_phys(entry));
 
 	if (MSM_PM_DEBUG_RESET_VECTOR & msm_pm_debug_mask)
 		pr_info("CPU%u: %s: program vector to %p\n",
 			cpu, __func__, entry);
 
-	collapsed = msm_pm_collapse();
+	collapsed = save_cpu_regs ? msm_pm_collapse() : msm_pm_pc_hotplug();
 
 	msm_pm_boot_config_after_pc(cpu);
 
