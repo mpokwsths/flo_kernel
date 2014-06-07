@@ -1564,6 +1564,12 @@ config MSM_CPU_VOLTAGE_CONTROL
 	help
 	  This enables userspace CPU Voltage Control
 
+config CPU_OVERCLOCK
+	bool "Enable CPU Overclocking option"
+	default n
+	help
+	  Enable CPU overclock for apq8064 socs
+
 config GPU_OVERCLOCK
 	bool "GPU Overclock"
 	default n

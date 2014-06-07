@@ -131,6 +131,9 @@ static struct l2_level l2_freq_tbl[] __initdata = {
 	[12] = { { 1026000, HFPLL, 1, 0x26 }, 1150000, 1150000, 5 },
 	[13] = { { 1080000, HFPLL, 1, 0x28 }, 1150000, 1150000, 5 },
 	[14] = { { 1134000, HFPLL, 1, 0x2A }, 1150000, 1150000, 5 },
+#ifdef CONFIG_CPU_OVERCLOCK
+	[15] = { { 1188000, HFPLL, 1, 0x2C }, 1150000, 1150000, 5 },
+#endif
 	{ }
 };
 
@@ -251,6 +254,10 @@ static struct acpu_level tbl_PVS0_1512MHz[] __initdata = {
 	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(14), 1125000 },
 	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14), 1150000 },
 	{ 1, {  1512000, HFPLL, 1, 0x38 }, L2(14), 1162500 },
+#ifdef CONFIG_CPU_OVERCLOCK
+	{ 1, {  1620000, HFPLL, 1, 0x3C }, L2(15), 1187500 },
+	{ 1, {  1728000, HFPLL, 1, 0x40 }, L2(15), 1212500 },
+#endif
 	{ 0, { 0 } }
 };
 
@@ -267,6 +274,10 @@ static struct acpu_level tbl_PVS1_1512MHz[] __initdata = {
 	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(14), 1087500 },
 	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14), 1112500 },
 	{ 1, {  1512000, HFPLL, 1, 0x38 }, L2(14), 1125000 },
+#ifdef CONFIG_CPU_OVERCLOCK
+	{ 1, {  1620000, HFPLL, 1, 0x3C }, L2(15), 1115000 },
+	{ 1, {  1728000, HFPLL, 1, 0x40 }, L2(15), 1175000 },
+#endif
 	{ 0, { 0 } }
 };
 
@@ -283,6 +294,10 @@ static struct acpu_level tbl_PVS2_1512MHz[] __initdata = {
 	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(14), 1037500 },
 	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14), 1075000 },
 	{ 1, {  1512000, HFPLL, 1, 0x38 }, L2(14), 1087500 },
+#ifdef CONFIG_CPU_OVERCLOCK
+	{ 1, {  1620000, HFPLL, 1, 0x3C }, L2(15), 1112500 },
+	{ 1, {  1728000, HFPLL, 1, 0x40 }, L2(15), 1137500 },
+#endif
 	{ 0, { 0 } }
 };
 
@@ -299,6 +314,10 @@ static struct acpu_level tbl_PVS3_1512MHz[] __initdata = {
 	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(14), 1000000 },
 	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14), 1037500 },
 	{ 1, {  1512000, HFPLL, 1, 0x38 }, L2(14), 1050000 },
+#ifdef CONFIG_CPU_OVERCLOCK
+	{ 1, {  1620000, HFPLL, 1, 0x3C }, L2(15), 1075000 },
+	{ 1, {  1728000, HFPLL, 1, 0x40 }, L2(15), 1100000 },
+#endif
 	{ 0, { 0 } }
 };
 
@@ -315,6 +334,10 @@ static struct acpu_level tbl_PVS4_1512MHz[] __initdata = {
 	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(14),  975000 },
 	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14), 1000000 },
 	{ 1, {  1512000, HFPLL, 1, 0x38 }, L2(14), 1012500 },
+#ifdef CONFIG_CPU_OVERCLOCK
+	{ 1, {  1620000, HFPLL, 1, 0x3C }, L2(15), 1037500 },
+	{ 1, {  1728000, HFPLL, 1, 0x40 }, L2(15), 1062500 },
+#endif
 	{ 0, { 0 } }
 };
 
@@ -331,6 +354,10 @@ static struct acpu_level tbl_PVS5_1512MHz[] __initdata = {
 	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(14),  962500 },
 	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14),  987500 },
 	{ 1, {  1512000, HFPLL, 1, 0x38 }, L2(14), 1000000 },
+#ifdef CONFIG_CPU_OVERCLOCK
+	{ 1, {  1620000, HFPLL, 1, 0x3C }, L2(15), 1025000 },
+	{ 1, {  1728000, HFPLL, 1, 0x40 }, L2(15), 1050000 },
+#endif
 	{ 0, { 0 } }
 };
 
@@ -347,6 +374,10 @@ static struct acpu_level tbl_PVS6_1512MHz[] __initdata = {
 	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(14),  962500 },
 	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(14),  975000 },
 	{ 1, {  1512000, HFPLL, 1, 0x38 }, L2(14),  987500 },
+#ifdef CONFIG_CPU_OVERCLOCK
+	{ 1, {  1620000, HFPLL, 1, 0x3C }, L2(15), 1012500 },
+	{ 1, {  1728000, HFPLL, 1, 0x40 }, L2(15), 1037500 },
+#endif
 	{ 0, { 0 } }
 };
 
