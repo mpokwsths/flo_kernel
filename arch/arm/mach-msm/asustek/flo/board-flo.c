@@ -64,7 +64,9 @@
 #include <mach/msm_dsps.h>
 #include <mach/msm_bus_board.h>
 #include <mach/cpuidle.h>
+#ifdef CONFIG_MACH_APQ8064_DEB
 #include <mach/mdm2.h>
+#endif
 #include <linux/msm_tsens.h>
 #include <mach/msm_xo.h>
 #include <mach/msm_rtb.h>
@@ -1897,6 +1899,7 @@ static struct platform_device qcedev_device = {
 };
 #endif
 
+#ifdef CONFIG_MACH_APQ8064_DEB
 static struct mdm_vddmin_resource mdm_vddmin_rscs = {
 	.rpm_id = MSM_RPM_ID_VDDMIN_GPIO,
 	.ap2mdm_vddmin_gpio = 30,
@@ -1921,6 +1924,7 @@ static struct mdm_platform_data mdm_platform_data = {
 	.ramdump_timeout_ms = 120000,
 	.mdm2ap_status_gpio_run_cfg = &mdm2ap_status_gpio_run_cfg,
 };
+#endif
 
 static struct tsens_platform_data apq_tsens_pdata  = {
 		.tsens_factor		= 1000,
@@ -3169,8 +3173,6 @@ static void __init apq8064ab_update_retention_spm(void)
 
 static void __init apq8064_common_init(void)
 {
-	u32 platform_version;
-
 	platform_device_register(&msm_gpio_device);
 	if (cpu_is_apq8064ab())
 		apq8064ab_update_krait_spm();
@@ -3247,7 +3249,9 @@ static void __init apq8064_common_init(void)
 	apq8064_pm8xxx_gpio_mpp_init();
 	apq8064_init_mmc();
 
+#ifdef CONFIG_MACH_APQ8064_DEB
 	if (machine_is_apq8064_deb()) {
+		u32 platform_version;
 		mdm_8064_device.dev.platform_data = &mdm_platform_data;
 		platform_version = socinfo_get_platform_version();
 		if (SOCINFO_VERSION_MINOR(platform_version) == 1) {
@@ -3259,6 +3263,7 @@ static void __init apq8064_common_init(void)
 			platform_device_register(&mdm_8064_device);
 		}
 	}
+#endif
 	platform_device_register(&apq8064_slim_ctrl);
 	slim_register_board_info(apq8064_slim_devices,
 		ARRAY_SIZE(apq8064_slim_devices));
