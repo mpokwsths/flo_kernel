@@ -345,6 +345,20 @@ int __attribute__((weak)) get_user_pages_fast(unsigned long start,
 }
 EXPORT_SYMBOL_GPL(get_user_pages_fast);
 
+void *kvalloc(unsigned long size)
+{
+	void *buf;
+
+	/*
+	 * __GFP_NORETRY to avoid oom-killings with high-order allocations -
+	 * it's better to fall back to vmalloc() than to kill things.
+	 */
+	buf = kmalloc(size, GFP_KERNEL | __GFP_NORETRY | __GFP_NOWARN);
+	if (!buf && size > PAGE_SIZE)
+		buf = vmalloc(size);
+	return buf;
+}
+
 void kvfree(const void *addr)
 {
 	if (is_vmalloc_addr(addr))
