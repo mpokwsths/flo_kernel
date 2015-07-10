@@ -596,15 +596,6 @@ void __init msm8960_mdp_writeback(struct memtype_reserve* reserve_table)
 {
 	mdp_pdata.ov0_wb_size = MSM_FB_OVERLAY0_WRITEBACK_SIZE;
 	mdp_pdata.ov1_wb_size = MSM_FB_OVERLAY1_WRITEBACK_SIZE;
-#if defined(CONFIG_ANDROID_PMEM) && !defined(CONFIG_MSM_MULTIMEDIA_USE_ION)
-	reserve_table[mdp_pdata.mem_hid].size +=
-		mdp_pdata.ov0_wb_size;
-	reserve_table[mdp_pdata.mem_hid].size +=
-		mdp_pdata.ov1_wb_size;
-
-	pr_info("mem_map: mdp reserved with size 0x%lx in pool\n",
-			mdp_pdata.ov0_wb_size + mdp_pdata.ov1_wb_size);
-#endif
 }
 
 static char mipi_dsi_splash_is_enabled(void)
