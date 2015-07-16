@@ -2374,24 +2374,6 @@ static struct platform_device apq8064_device_ext_mpp8_vreg __devinitdata = {
 			= &apq8064_gpio_regulator_pdata[GPIO_VREG_ID_EXT_MPP8],
 	},
 };
-/*
-static struct platform_device apq8064_device_ext_3p3v_vreg __devinitdata = {
-	.name	= GPIO_REGULATOR_DEV_NAME,
-	.id	= APQ8064_EXT_3P3V_REG_EN_GPIO,
-	.dev	= {
-		.platform_data =
-			&apq8064_gpio_regulator_pdata[GPIO_VREG_ID_EXT_3P3V],
-	},
-};
-*/
-static struct platform_device apq8064_device_ext_ts_sw_vreg __devinitdata = {
-	.name	= GPIO_REGULATOR_DEV_NAME,
-	.id	= PM8921_GPIO_PM_TO_SYS(23),
-	.dev	= {
-		.platform_data
-			= &apq8064_gpio_regulator_pdata[GPIO_VREG_ID_EXT_TS_SW],
-	},
-};
 
 static struct platform_device apq8064_device_rpm_regulator __devinitdata = {
 	.name	= "rpm-regulator",
@@ -3230,9 +3212,6 @@ static void __init apq8064_common_init(void)
 	else
 		platform_add_devices(pm8917_common_devices,
 					ARRAY_SIZE(pm8917_common_devices));
-
-	if (!machine_is_apq8064_mtp())
-		platform_device_register(&apq8064_device_ext_ts_sw_vreg);
 
 	platform_add_devices(common_devices, ARRAY_SIZE(common_devices));
 	if (!(machine_is_mpq8064_cdp() || machine_is_mpq8064_hrd() ||
