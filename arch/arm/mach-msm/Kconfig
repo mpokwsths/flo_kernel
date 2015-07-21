@@ -130,7 +130,7 @@ config ARCH_MSM8X60
 	select MSM_SCM if SMP
 	select MULTI_IRQ_HANDLER
 	select MSM_MULTIMEDIA_USE_ION
-	select MSM_PM if PM
+	select MSM_PM8X60 if PM
 	select MSM_RUN_QUEUE_STATS
 	select ARM_HAS_SG_CHAIN
 
@@ -160,7 +160,7 @@ config ARCH_MSM8960
 	select ARCH_HAS_HOLES_MEMORYMODEL
 	select MSM_MULTIMEDIA_USE_ION
 	select MULTI_IRQ_HANDLER
-	select MSM_PM if PM
+	select MSM_PM8X60 if PM
 	select HOLES_IN_ZONE if SPARSEMEM
 	select MSM_RUN_QUEUE_STATS
 	select ARM_HAS_SG_CHAIN
@@ -194,7 +194,7 @@ config ARCH_MSM8930
 	select ARCH_HAS_HOLES_MEMORYMODEL
 	select MSM_ULTRASOUND
 	select MULTI_IRQ_HANDLER
-	select MSM_PM if PM
+	select MSM_PM8X60 if PM
 	select HOLES_IN_ZONE if SPARSEMEM
 	select ARM_HAS_SG_CHAIN
 	select MSM_KRAIT_WFE_FIXUP
@@ -218,7 +218,7 @@ config ARCH_APQ8064
 	select MSM_RPM
 	select MSM_SPM_V2
 	select MSM_L2_SPM
-	select MSM_PM if PM
+	select MSM_PM8X60 if PM
 	select CPU_HAS_L2_PMU
 	select HOLES_IN_ZONE if SPARSEMEM
 	select MIGHT_HAVE_PCI
@@ -241,7 +241,7 @@ config ARCH_MSM8974
 	select MSM_PIL
 	select MSM_SPM_V2
 	select MSM_L2_SPM
-	select MSM_PM if PM
+	select MSM_PM8X60 if PM
 	select MAY_HAVE_SPARSE_IRQ
 	select SPARSE_IRQ
 	select MSM_RPM_SMD
@@ -279,7 +279,7 @@ config ARCH_MSM8226
 	select MSM_PIL
 	select MSM_SPM_V2
 	select MSM_L2_SPM
-	select MSM_PM if PM
+	select MSM_PM8X60 if PM
 	select MAY_HAVE_SPARSE_IRQ
 	select SPARSE_IRQ
 	select MSM_RPM_SMD
@@ -314,7 +314,7 @@ config ARCH_MSM9615
 	select REGULATOR
 	select MSM_RPM_REGULATOR
 	select MULTI_IRQ_HANDLER
-	select MSM_PM if PM
+	select MSM_PM8X60 if PM
 	select MSM_XO
 	select MSM_MULTIMEDIA_USE_ION
 	select MSM_QDSP6_APR
@@ -2060,7 +2060,7 @@ config MSM_PM2
 	depends on PM
 	bool
 
-config MSM_PM
+config MSM_PM8X60
 	depends on PM
 	bool
 
