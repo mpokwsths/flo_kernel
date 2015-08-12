@@ -3156,9 +3156,8 @@ static void __init apq8064ab_update_retention_spm(void)
 static void __init apq8064_common_init(void)
 {
 	platform_device_register(&msm_gpio_device);
-	if (cpu_is_apq8064ab())
-		apq8064ab_update_krait_spm();
 	if (cpu_is_krait_v3()) {
+		apq8064ab_update_krait_spm();
 		msm_pm_set_tz_retention_flag(0);
 		apq8064ab_update_retention_spm();
 	} else {
